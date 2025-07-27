@@ -12,23 +12,23 @@ interface HeaderProps {
 const Header = ({ collapsed, onToggleSidebar }: HeaderProps) => {
   return (
     <header className="h-16 px-4 flex items-center justify-between border-b bg-background sticky top-0 z-40">
-      <Button
-        onClick={onToggleSidebar}
-        size="icon"
-        className=" transition  h-10 w-10"
-      >
+      <div className="flex items-center gap-3">
+        <Button
+          onClick={onToggleSidebar}
+          size="icon"
+          className="transition h-10 w-10"
+        >
+          <Menu className="!h-6 !w-6 md:hidden" />
+          {collapsed ? (
+            <ChevronRight className="!h-6 !w-6 hidden md:block" />
+          ) : (
+            <ChevronLeft className="!h-6 !w-6 hidden md:block" />
+          )}
+        </Button>
+        
+        <h1 className="text-lg font-semibold md:hidden">Dashboard</h1>
+      </div>
       
-        <Menu className="!h-5 !w-5 md:hidden" />
-
-       
-        {collapsed ? (
-          <ChevronRight className="!h-5 !w-5 hidden md:block" />
-        ) : (
-          <ChevronLeft className="!h-5 !w-5 hidden md:block" />
-        )}
-      </Button>
-
-      <h1 className="text-lg font-semibold  lg:hidden">Dashboard</h1>
       <ModeToggle />
     </header>
   );

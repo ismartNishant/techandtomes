@@ -3,18 +3,21 @@
 import React, { useState, useEffect } from 'react';
 import Header from './Header';
 import Sidebar from './SideBar';
-
+import clsx from 'clsx';
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true); 
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     document.body.classList.toggle('overflow-hidden', mobileOpen);
+    return () => {
+      document.body.classList.remove('overflow-hidden');
+    };
   }, [mobileOpen]);
 
   const handleToggleSidebar = () => {
-    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+    const isMobile = window.innerWidth < 768;
     if (isMobile) {
       setMobileOpen((prev) => !prev);
     } else {
@@ -23,27 +26,24 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden">
- 
+    <div className="min-h-screen bg-muted">
       <Sidebar
         collapsed={collapsed}
         mobileOpen={mobileOpen}
         onCloseMobile={() => setMobileOpen(false)}
       />
 
- 
-      {mobileOpen && (
-        <div
-          className="fixed inset-0 z-30 bg-black/50 md:hidden"
-          onClick={() => setMobileOpen(false)}
-        />
-      )}
-
-
-      <div className="flex flex-col flex-1 min-w-0 min-h-screen">
+      <div 
+        className={clsx(
+          "min-h-screen transition-all duration-300",
+          "ml-0 md:ml-20",
+          !collapsed && "md:ml-52"
+        )}
+      >
         <Header collapsed={collapsed} onToggleSidebar={handleToggleSidebar} />
-        <main className="flex-1 overflow-y-auto p-4 bg-muted  ">
-          <div className='bg-background p-4 rounded-lg '>
+        
+        <main className="p-4">
+          <div className="bg-background p-4 rounded-lg">
             {children}
           </div>
         </main>
